@@ -176,7 +176,7 @@ class Earth {
       calculateOrbit() {
         let currentTime = 0
         // Calculate the elapsed time since the previous update
-        const elapsedTime = (Date.now()/15000) - currentTime;
+        const elapsedTime = (Date.now()/150000) - currentTime;
         currentTime = Date.now(); // Update current time to the current time
     
         // Calculate the new mean anomaly based on the elapsed time
@@ -194,7 +194,7 @@ class Earth {
     
         this.earthMesh.position.set(x, y, z);
         this.earthParent.position.set(x, y, z);
-        //console.log(this.earthParent.position)
+        console.log(this.earthParent.position)
         this.cloudMesh.position.set(x, y, z);
     
         return new CANNON.Vec3(x, y, z);

@@ -1,3 +1,25 @@
+`MIT License
+
+Copyright (c) 2022 simondevyoutube
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.`
+
 import InputController, {KEYS} from "./InputController";
 import * as THREE from "three";
 
@@ -10,7 +32,7 @@ export default class FirstPersonCamera {
       this.camera = camera;
       this.input_ = new InputController();
       this.rotation_ = new THREE.Quaternion();
-      this.translation_ = new THREE.Vector3(194903781.48572785+10000,72063925.2433987+200000, 69273264.36554492 );
+      this.translation_ = new THREE.Vector3(-151545629.0391314+100000,12870096.755827673, 0 );
       this.phi_ = 0;
       this.phiSpeed_ = 8;
       this.theta_ = 0;
@@ -72,12 +94,12 @@ export default class FirstPersonCamera {
     }
   
     updateTranslation_(timeElapsedS) {
-      const forwardVelocity = (this.input_.key(KEYS.w) ? 1 : 0) + (this.input_.key(KEYS.s) ? -1 : 0)
-      const strafeVelocity = (this.input_.key(KEYS.a) ? 1 : 0) + (this.input_.key(KEYS.d) ? -1 : 0)
-      const upVelocity = (this.input_.key(KEYS.q) ? 1 : 0)
-      const downVelocity = (this.input_.key(KEYS.e) ? 1 : 0)
-      const rollRightVelocity = (this.input_.key(KEYS.c) ? 1 : 0)
-      const rollLeftVelocity = (this.input_.key(KEYS.z) ? 1 : 0)
+      const forwardVelocity = (this.input_.key(KEYS.w) ? 50 : 0) + (this.input_.key(KEYS.s) ? -50 : 0)
+      const strafeVelocity = (this.input_.key(KEYS.a) ? 25 : 0) + (this.input_.key(KEYS.d) ? -25 : 0)
+      const upVelocity = (this.input_.key(KEYS.q) ? 25 : 0)
+      const downVelocity = (this.input_.key(KEYS.e) ? 25 : 0)
+      const rollRightVelocity = (this.input_.key(KEYS.c) ? 25 : 0)
+      const rollLeftVelocity = (this.input_.key(KEYS.z) ? 25 : 0)
 
   
       const qx = new THREE.Quaternion();

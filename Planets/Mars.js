@@ -128,7 +128,7 @@ class Mars {
     
         this.marsMesh.position.set(x, y, z);
         this.marsParent.position.set(x, y, z);
-        console.log(this.marsParent.position)
+        //console.log(this.marsParent.position)
     
         return new CANNON.Vec3(x, y, z);
     }

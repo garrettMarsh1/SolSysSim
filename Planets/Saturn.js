@@ -100,29 +100,40 @@ class Saturn {
             new THREE.SphereGeometry(this.radius, 96, 96),
             new THREE.MeshPhongMaterial({
                 map: this.texture,
-                transparent: true,
-                opacity: 0.97
+                //transparent: true,
+                //opacity: 0.97
 
             })
         );
         this.saturnMesh.name = this.name;
         this.saturnMesh.position.set(this.position.x, this.position.y, this.position.z);
 
+        // calculate the angle between the sun and the planet
+        let angle = Math.acos(new THREE.Vector3(0, 0, 0).dot(this.position) / (new THREE.Vector3(0, 0, 0).length() * this.position.length()));
+
+        let rotationMatrix = new THREE.Matrix4().makeRotationAxis(new THREE.Vector3(0, 1, 0), angle);
+
+        // apply the rotation matrix to the planet's mesh
+
+        // if (this.saturnMesh.position.x) {
+        //     this.saturnMesh.applyMatrix4(rotationMatrix);
+        //     console.log('rotated')
+        // }
+        
+        
+
         this.ringMesh = new THREE.Mesh(
-            new THREE.RingGeometry(this.radius + 40000, this.radius + 70000, 960, 960, 0, Math.PI * 2),
-            new THREE.ShaderMaterial({
-                uniforms: {
-                    ringTex: {  value: this.ringTexture },
-                    lightPos: {  value: new THREE.Vector3(0, 0, 0) }
-                },
-                vertexShader,
-                fragmentShader,
-                side: THREE.DoubleSide
+            new THREE.RingGeometry(this.radius + 30000, this.radius + 60000, 96, 96, 0, Math.PI * 2),
+            new THREE.MeshBasicMaterial({
+                map: this.ringTexture,
+                //set double side to true
+                //side: THREE.DoubleSide,
             })
         );
-        this.ringMesh.name = this.name + ' Ring';
+
+        //this.ringMesh.name = this.name + ' Ring';
         this.ringMesh.rotation.x = Math.PI / 2;
-        this.ringMesh.position.set(this.position.x, this.position.y, this.position.z);
+        //this.ringMesh.position.set(this.position.x, this.position.y, this.position.z);
 
         this.saturnMesh.add(this.ringMesh);
         this.saturnParent.add(this.saturnMesh);
@@ -165,7 +176,7 @@ class Saturn {
       calculateOrbit() {
         let currentTime = 0
         // Calculate the elapsed time since the previous update
-        const elapsedTime = (Date.now()/15000) - currentTime;
+        const elapsedTime = (Date.now()/1500000) - currentTime;
         currentTime = Date.now(); // Update current time to the current time
     
         // Calculate the new mean anomaly based on the elapsed time
@@ -189,12 +200,16 @@ class Saturn {
         return new CANNON.Vec3(x, y, z);
     }
 
+    
+
     updateSaturn() {
         this.calculateOrbit();
         this.saturnBody.applyForce(this.calculateForce(), this.saturnBody.position);
-        this.saturnMesh.rotation.y += this.rotationPeriod * (Math.PI / 180) / 18;
-        //this.saturnMesh.rotation.y  
+        
 
+        
+        
+        
         //console.log(this.saturnMesh.position)
     }
     
