@@ -14,6 +14,7 @@ import Uranus from './Planets/Uranus';
 import Neptune from './Planets/Neptune';
 import Pluto from './Planets/Pluto';
 import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/css2drenderer';
+import {CSS3DRenderer, CSS3DObject} from 'three/examples/jsm/renderers/CSS3DRenderer';
 //import tweenjs
 import * as TWEEN from '@tweenjs/tween.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
@@ -43,7 +44,7 @@ export default class Main {
         //create a scene
         this.scene = new THREE.Scene();
         //create a camera
-        this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.01, 1000000000000000);
+        this.camera = new THREE.PerspectiveCamera(105, window.innerWidth / window.innerHeight, 0.01, 1000000000000000);
         this.camera.lookAt(0, 0, 0);
         //this.camera.position.set(194973804.5662673+100000,71929388.07358344, 69143937.12032303 )
         //this.camera.lookAt(0, 0, 0);
@@ -95,7 +96,9 @@ export default class Main {
         //this.controls = new OrbitControls(this.camera, this.renderer.domElement);
 
 
-        this.fpsCamera = new FirstPersonCamera(this.camera, this.objects_);
+        this.fpsCamera = new FirstPersonCamera(this.camera, this.objects_, this.translation_);
+        //bind this.fpsCamera to this
+        
 
 
         //create a cannon world
@@ -208,7 +211,7 @@ export default class Main {
         }
         const planets = Object.values(planetMesh);
 
-        function updatePlanetMenu(planet) {
+        function updatePlanetMenu(planet, fpsCamera) {
             const planetDiv = document.getElementById(`planet-${planet.name}`);
             planetDiv.innerHTML = `
               ${planet.name} - 
@@ -217,18 +220,16 @@ export default class Main {
               z: ${Math.floor(planet.position.z)}
               <button class="warp-button" id="warp-${planet.name}">Warp to ${planet.name}</button>
             `;
-          
-            // Add event listener to warp button
-            const warpButton = document.getElementById(`warp-${planet.name}`);
-            warpButton.addEventListener('click', () => {
-              // Create TWEEN animation to warp camera to planet
-              const position = planetMesh.position;
-              const tween = new TWEEN.Tween(this.camera.position)
-                .to({ x: position.x, y: position.y, z: position.z }, 2000)
-                .easing(TWEEN.Easing.Quadratic.InOut)
-                .start();
+            document.getElementById(`warp-${planet.name}`).addEventListener('click', () => {
+                warpToPlanet(planet, fpsCamera);
             });
-          }
+        }
+
+        
+        
+
+
+        
         
         const planetMenu = document.getElementById("planet-menu");
         planets.forEach(planet => {
@@ -248,14 +249,14 @@ export default class Main {
         planets.forEach(planet => {
             // create a CSS2DObject with the planet's name
             if(!planetLabels[planet.name]){
-                const planetLabel = new CSS2DObject(document.createElement('div'));
+                const planetLabel = new CSS3DObject(document.createElement('div'));
                 planetLabel.element.innerHTML = planet.name;
                 planetLabel.element.style.color = "green";
                 planetLabel.element.style.font = "20px Arial";
                 planetLabel.position.set(planet.position.x, planet.position.y, planet.position.z);
                 this.scene.add(planetLabel);
                 planetLabels[planet.name] = planetLabel;
-                planetLabel.lookAt(this.camera.position);
+                //planetLabel.lookAt(this.camera.position);
             }
         });
 
@@ -300,7 +301,7 @@ export default class Main {
           
 
         
-        this.objects_ = [earth, mercury, venus, mars, jupiter, saturn, uranus, neptune, pluto, sun];
+        this.objects_ = [earth, mercury, venus, mars, jupiter, saturn, uranus, neptune, pluto, sun, skyMesh];
 
 
 
@@ -348,15 +349,15 @@ export default class Main {
         }
 
         
-        this.updatePlanetMenu(this.mercuryMesh);
-        this.updatePlanetMenu(this.venusMesh);
-        this.updatePlanetMenu(this.earthMesh);
-        this.updatePlanetMenu(this.marsMesh);
-        this.updatePlanetMenu(this.jupiterMesh);
-        this.updatePlanetMenu(this.saturnMesh);
-        this.updatePlanetMenu(this.uranusMesh);
-        this.updatePlanetMenu(this.neptuneMesh);
-        this.updatePlanetMenu(this.plutoMesh);
+        this.updatePlanetMenu(this.mercuryMesh, this.fpsCamera);
+        this.updatePlanetMenu(this.venusMesh, this.fpsCamera);
+        this.updatePlanetMenu(this.earthMesh, this.fpsCamera);
+        this.updatePlanetMenu(this.marsMesh, this.fpsCamera);
+        this.updatePlanetMenu(this.jupiterMesh, this.fpsCamera);
+        this.updatePlanetMenu(this.saturnMesh, this.fpsCamera);
+        this.updatePlanetMenu(this.uranusMesh, this.fpsCamera);
+        this.updatePlanetMenu(this.neptuneMesh, this.fpsCamera);
+        this.updatePlanetMenu(this.plutoMesh, this.fpsCamera);
 
         this.updatePlanetLabelPositions(this.mercuryParent);
         this.updatePlanetLabelPositions(this.venusMesh);
